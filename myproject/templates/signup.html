@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+</head>
+<body>
+    <h1>Fill Up this Employees Form(SFL):</h1>
+    {%for message in messages%}
+    {{message}}
+    {%endfor%}
+    <form action="signup" method="POST">
+        {%csrf_token%}
+        <p>Name</p>
+        <input type="text" name="name">
+        <p>Phone Number</p>
+        <input type="text" name="phone_number">
+        <p>Email</p>
+        <input type="email" name="email">
+        <p>National ID Number</p>
+        <input type="text" name="id_number">
+        <h3>Gender</h3>
+        <input type="radio" name="gender" value="male">Male<br>
+        <input type="radio" name="gender" value="female">Female<br>
+        <p>Date Of Birth</p>
+        <input type="date" name="date_of_Birth">
+        <p>Disability</p>
+        <input type="checkbox" name="disability" value="physical">Physical<br>
+        <input type="checkbox" name="disability" value="Mental">Mental<br>
+        <input type="checkbox" name="disability"value="none">None
+        <p>Password:</p>
+        <input type="password" name="password">
+        <p>password2</p>
+        <input type="password" name="password2"><br><br>
+        <input type="submit">
+    </form>
+    
+</body>
+</html>

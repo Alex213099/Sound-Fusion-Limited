@@ -1,0 +1,115 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{%static 'styleDash.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="left_navigations">
+                <ul>
+                    <li>
+                        <a href="" class="active"><i class="fa-sharp fa-solid fa-house-chimney"></i>
+                        <span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fa-solid fa-wallet"></i>
+                            <span>Finance</span></a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fa-regular fa-user"></i>
+                            <span>Profile</span></a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fa-brands fa-servicestack"></i>
+                        <span>Self Service</span></a>
+                    </li>
+                    <li class="logout">
+                        <a href=""><i class="fa-light fa-right-from-bracket"></i>
+                            <span>Log Out</span></a>
+                    </li>
+                </ul>
+    
+            </div>
+        </div>
+        <div class="main-cnt">
+            <div class="employee-dsh">
+                <div>
+                    <h3>Employeee</h3>
+                    <h1>Dashboard</h1>
+                </div>
+                <div>
+                    <input type="text"name='search' placeholder="search">
+                </div>
+                <div class="name">
+                    {{user.name}}
+                </div>
+            </div>
+            <div class="profile-main">
+                <div class="profile-img">
+                    <img src="" alt="profile image">
+                </div>
+                <div class="profile-cnt">
+                    <hr>
+                    <div>
+                        Employee Id<span>{{user.id}}</span>
+                    </div>
+                    <hr>
+                    <div>
+                        Id Number<span>{{user.id_number}}</span>
+                    </div>
+                    <hr>
+                    <div>
+                        Full Name<span>{{user.name}}</span>
+                    </div>
+                    <hr>
+                    <div>
+                        gender<span>{{user.gender}}</span>
+                    </div>
+                    <hr>
+                    <div>
+                        Date Of Birth<span>{{user.date_of_Birth}}</span>
+                    </div>
+                    <hr>
+                    <div>
+                        Disability<span>{{user.disability}}</span>
+                    </div>
+                    <hr>
+                    <div>
+                        Phone Number<span>{{user.phone_number}}</span>
+                    </div>
+                    <hr>
+                    <div>
+                        Email adress<span>{{user.email}}</span>
+                    </div>
+                    <hr>
+                    <div>
+                        Total Billed<span>{{payment.Total_billed}}</span>
+                    </div>
+                    <hr>
+                    <div>
+                        Total Paid<span>{{payment.total_paid}}</span>
+                    </div>
+                    <hr>
+                    <div>
+                        Balance<span>{{user.salary}}</span>
+                    </div>
+                    <hr>
+                    
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+    <footer>
+        <P>&copy Sound Fusion Limited @2025</P>
+    </footer>
+    
+</body>
+</html>
