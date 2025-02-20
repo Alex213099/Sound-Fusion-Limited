@@ -18,16 +18,16 @@
                         <span>Dashboard</span></a>
                     </li>
                     <li>
-                        <a href=""><i class="fa-solid fa-wallet"></i>
-                            <span>Finance</span></a>
+                        <a href="{% url 'list' %}"><i class="fa-solid fa-wallet"></i>
+                            <span>Attendace List</span></a>
                     </li>
                     <li>
-                        <a href=""><i class="fa-regular fa-user"></i>
-                            <span>Profile</span></a>
+                        <a href="{%url 'add_attendance' %}"><i class="fa-regular fa-user"></i>
+                            <span>Mark Attendace</span></a>
                     </li>
                     <li>
                         <a href=""><i class="fa-brands fa-servicestack"></i>
-                        <span>Self Service</span></a>
+                        <span>Edit Attendace</span></a>
                     </li>
                     <li class="logout">
                         <a href=""><i class="fa-light fa-right-from-bracket"></i>
@@ -47,7 +47,9 @@
                     <input type="text"name='search' placeholder="search">
                 </div>
                 <div class="name">
+                    {%if user.is_authenticated%}
                     {{user.name}}
+                    {%endif%}
                 </div>
             </div>
             <div class="profile-main">

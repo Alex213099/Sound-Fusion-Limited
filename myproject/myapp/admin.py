@@ -5,4 +5,4 @@ from .models import User,Event,Attendance,Payment
 admin.site.register(User)
 admin.site.register(Event)
 admin.site.register(Attendance)
-admin.site.register(Payment)
+

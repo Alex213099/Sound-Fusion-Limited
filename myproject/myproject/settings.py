@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +28,15 @@ SECRET_KEY = 'django-insecure-2l!1pw__6@da4!i1x&6xd0tr)go))%x&m-1b1p9g!#tsp%==95
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "c0bf-41-90-172-63.ngrok-free.app",  # Add your Ngrok URL here
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://c0bf-41-90-172-63.ngrok-free.app"
+]
+
 
 
 # Application definition
@@ -39,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
+    'payment',
 ]
 AUTH_USER_MODEL='myapp.User'
 
@@ -113,6 +124,7 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+LOGIN_URL='http://127.0.0.1:8000/login'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -126,4 +138,10 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR,'static'),)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MPESA_ENV = 'sandbox'  # Change to 'production' when live
+MPESA_CONSUMER_KEY = os.getenv('MPESA_CONSUMER_KEY', 'your_consumer_key')
+MPESA_CONSUMER_SECRET = os.getenv('MPESA_CONSUMER_SECRET', 'your_consumer_secret')
+MPESA_SHORTCODE = os.getenv('MPESA_SHORTCODE', 'your_shortcode')
+MPESA_PASSKEY = os.getenv('MPESA_PASSKEY', 'your_passkey')
+MPESA_BASE_URL = "https://sandbox.safaricom.co.ke" if MPESA_ENV == "sandbox" else "https://api.safaricom.co.ke"
 

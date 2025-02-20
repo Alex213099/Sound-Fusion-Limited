@@ -1,0 +1,18 @@
+<h1>My id is {{attendance.id}}</h1>
+<form method="POST">
+    {% csrf_token %}
+    
+    <label for="event">Event:</label>
+    <input type="text" id="event" name="event" value="{{ attendance.event }}" readonly>
+
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" value="{{ attendance.date }}" readonly>
+
+    <label for="hours_worked">Hours Worked:</label>
+    <input type="number" id="hours_worked" name="hours_worked" value="{{ attendance.hours_worked }}">
+
+    <label for="overtime_hours">Overtime Hours:</label>
+    <input type="number" id="overtime_hours" name="overtime_hours" value="{{ attendance.overtime_hours }}">
+
+    <button type="submit">Save Changes</button>
+</form>

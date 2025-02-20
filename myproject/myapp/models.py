@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin,UserManager
 from django.utils import timezone
+from payment.models import Payment
 
 
 # Create your models here.
@@ -24,7 +25,6 @@ class CustomUserManager(UserManager):
         extra_fields.setdefault('is_staff',True)
         extra_fields.setdefault('is_superuser',True)
         return self._create_user( email, password, **extra_fields)
-
 
 
 
@@ -77,27 +77,38 @@ class Attendance(models.Model):
     event=models.ForeignKey(Event,on_delete=models.CASCADE)
     date=models.DateField(auto_now_add=True)
     hours_worked=models.PositiveIntegerField(default=8)
-    overtime_hours=models.PositiveIntegerField(default=8)
+    overtime_hours=models.PositiveIntegerField(default=0)
 
     def calculate_pay(self,overtime_hours):
         base_pay=1000
         return (overtime_hours*100)+base_pay
+    
+    def save(self,*args,**kwargs):
+        #check if attendance instace already exist (i.e its an update ,not an entry)
+        if self.pk:
+            old_attendace=Attendance.objects.get(pk=self.pk)#gets previous record
+            old_overtime=old_attendace.overtime_hours#stores the old overtime
+
+            if self.overtime_hours !=old_overtime:
+                additional_pay=(self.overtime_hours-old_overtime)*100
+
+                #update payment
+                payment,created=Payment.objects.get_or_create(user=self.user)
+                payment.Total_billed+=additional_pay#add the extra pay
+                self.user.salary=payment.Total_billed
+                payment.save()
+                self.user.save()
+        else:
+            #if this is a new entry
+            pay=self.calculate_pay(self.overtime_hours)
+            payment,created=Payment.objects.get_or_create(user=self.user)
+            payment.Total_billed+=pay
+            self.user.salary=payment.Total_billed
+            payment.save()
+            self.user.save()
+        super().save(*args,**kwargs)
+
+    
     def __str__(self):
         return f"{self.user.name} - {self.event.name} - {self.date}"
 
-class Payment(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)
-    total_paid=models.DecimalField(max_digits=10,decimal_places=2 ,default=0.00)
-    last_payment_date=models.DateField(auto_now_add=True)
-    Total_billed=models.DecimalField(max_digits=10, decimal_places=2,default=0.00)
-
-    def make_payment(self,amount):
-        if self.user.salary>=amount:
-            self.user.salary-=amount
-            self.total_paid+=amount
-            self.user.save()
-            self.save()
-            return True
-        return False
-    def __str__(self):
-        return f"{self.user.username}- paid:{self.total_paid}"

@@ -1,0 +1,14 @@
+{
+  "Result": {
+    "ResultCode": 0,
+    "ResultDescription": "Success",
+    "TransactionId": "ABC123",
+    "ResultParameters": {
+      "ResultParameter": [
+        {"Key": "TransactionAmount", "Value": "1000"},
+        {"Key": "TransactionReceipt", "Value": "XYZ987"},
+        {"Key": "ReceiverPartyPublicName", "Value": "254700123456-Account"}
+      ]
+    }
+  }
+}

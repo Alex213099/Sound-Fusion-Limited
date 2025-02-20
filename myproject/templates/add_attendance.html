@@ -1,0 +1,84 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{%static 'styleDash.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="left_navigations">
+                <ul>
+                    <li>
+                        <a href="" class="active"><i class="fa-sharp fa-solid fa-house-chimney"></i>
+                        <span>Dashboard</span></a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fa-solid fa-wallet"></i>
+                            <span>Finance</span></a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fa-regular fa-user"></i>
+                            <span>Profile</span></a>
+                    </li>
+                    <li>
+                        <a href=""><i class="fa-brands fa-servicestack"></i>
+                        <span>Self Service</span></a>
+                    </li>
+                    <li class="logout">
+                        <a href=""><i class="fa-light fa-right-from-bracket"></i>
+                            <span>Log Out</span></a>
+                    </li>
+                </ul>
+    
+            </div>
+        </div>
+        <div class="main-cnt">
+            <div class="employee-dsh">
+                <div>
+                    <h3>Employeee</h3>
+                    <h1>Dashboard</h1>
+                </div>
+                <div>
+                    <input type="text"name='search' placeholder="search">
+                </div>
+                <div class="name">
+                    {{user.name}}
+                </div>
+            </div>
+        <div class="table">
+            <h1>Hello {{user.name}}. Mark Your Attendance Below</h1>
+            <form method="post">
+                {%csrf_token%}
+                <table border="1">
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Event</th>
+                        <th>Over Time</th>
+                    </tr>
+                    <tr>
+                        <td>{{request.user.name}}</td>
+                        <td>{{form.date}}</td>
+                        <td>{{form.event}}</td>
+                        <td>{{form.overtime_hours}}</td>
+                    </tr>
+                </table>
+                <button type="submit">Submit</button>
+            </form>
+            {%if attendance%}
+            <a href="{% url 'edit_attendance' attendance.id %}">Edit</a>
+            {%endif%}
+            <a href="{% url 'list' %}">Back to Attendance List</a>
+            
+            
+
+        </div>
+            
+    
+</body>
+</html>

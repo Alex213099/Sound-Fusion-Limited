@@ -1,9 +1,15 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.models import auth
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from .models import Payment
+from .form import AttendanceForm
+from datetime import date
+from .models import Attendance
+from django.contrib.auth.decorators import login_required
+from payment.models import Payment
+
 
 User=get_user_model()
 
@@ -38,8 +44,8 @@ def signup(request):
             return redirect('signup')
     else:
         return render(request, 'signup.html')
-    
-def login(request):
+
+def login(request,):
     if request.method=="POST":
         email=request.POST['email']
         password=request.POST['password']
@@ -54,5 +60,68 @@ def login(request):
             return redirect('login')
     else:
         return render(request,'login.html')
+    
+@login_required
 def dashboard(request):
-    return render(request,"dashboard.html",{'User':User,'payment':Payment})
+    payment,create=Payment.objects.get_or_create(user=request.user)
+    user=request.user
+    if payment:
+        payment.refresh_from_db()
+    if user:
+        user.refresh_from_db()
+
+    return render(request,"dashboard.html",{'user':user,'payment':payment})
+@login_required
+def add_attendance(request):
+    attendance=None
+    if request.method == 'POST':
+        form = AttendanceForm(request.POST)
+        print(request.user)
+        if form.is_valid():
+            attendance = form.save(commit=False)  # Don't save yet
+            attendance.user = request.user # Assign the logged-in user
+            attendance.date = date.today()  # Set the date
+            attendance.save()
+            return redirect('list')
+        else:
+            print("Form errors:", form.errors)  # Debugging
+            
+
+    else:
+        attendance = Attendance.objects.filter(user=request.user, date=date.today()).first()
+        form = AttendanceForm(instance=attendance) if attendance else AttendanceForm()
+
+    return render(request, 'add_attendance.html', {'form': form,'attendance':attendance})
+@login_required
+def edit_attendance(request, attendance_id):
+    attendance = get_object_or_404(Attendance, id=attendance_id, user=request.user)
+    
+    if request.method == "POST":
+        # Get new values from the form
+        old_overtime = attendance.overtime_hours  # Store old overtime value
+        new_overtime = int(request.POST.get("overtime_hours", 0))
+        
+        # Check if overtime hours changed
+        if old_overtime != new_overtime:
+            additional_pay = (new_overtime - old_overtime) * 100
+
+            # Update the user's payment record
+            payment, created = Payment.objects.get_or_create(user=request.user)
+            payment.Total_billed += additional_pay
+            request.user.salary = payment.Total_billed
+            payment.save()
+
+        # Update attendance details
+        attendance.hours_worked = request.POST.get("hours_worked", 8)  # Default to 8 if empty
+        attendance.overtime_hours = new_overtime
+        attendance.save()
+        
+        return redirect("dashboard")  # Redirect after saving
+
+    return render(request, "edit_attendance.html", {"attendance": attendance})
+@login_required
+def list(request):
+    attendants=Attendance.objects.all()
+
+
+    return render(request,'list.html',{'attendants':attendants})

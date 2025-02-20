@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Attendance Records</h1>
+   
+    <table border="1" width="50%" cellpadding="10" cellspacing="0">
+        <tr>
+            <th>Name</th>
+            <th>Event</th>
+            <th>Date</th>
+            <th>Overtime</th>
+        </tr>
+        {%for attr in attendants%}
+        <tr>
+            <td>{{attr.user.name}}</td>
+            <td>{{attr.event}}</td>
+            <td>{{attr.date}}</td>
+            <td>{{attr.overtime_hours}}</td>
+
+        </tr>
+        {%endfor%}
+    </table>
+</body>
+</html>
