@@ -28,9 +28,7 @@ SECRET_KEY = 'django-insecure-2l!1pw__6@da4!i1x&6xd0tr)go))%x&m-1b1p9g!#tsp%==95
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '*'
-]
+ALLOWED_HOSTS = ['.vercel.app','*']
 CSRF_TRUSTED_ORIGINS = [
     "http://9412-41-90-172-63.ngrok-free.app"
 ]
@@ -85,12 +83,24 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv('VERCEL'):
+    DATABASES={
+        'default':{
+            'ENGINE':'django.db.backends.mysql',
+            'NAME':'railway',
+            'USER':'root',
+            'PASSWORD':'WtOyzbUTkVzzivmsNnGzTNaVPaRgTDwb',
+            'HOST':'mysql.railway.internal',
+            'PORT':'3306',
+        }
     }
-}
+else:
+    DATABASES={
+        'default':{
+            'ENGINE':'django.db.backends.sqlite3',
+            'NAME':os.path.join(BASE_DIR,'db.sqlite3'),
+        }
+    }
 
 
 # Password validation
