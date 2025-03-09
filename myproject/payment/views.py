@@ -14,12 +14,12 @@ from myapp.models import User
 # Create your views here.
 
 @csrf_exempt
-def stk_push(request,user_id):
-    payment=Payment.objects.all().get(id=user_id)
+def stk_push(request):
+    """payment=Payment.objects.all().get()
     phone_number=payment.user.phone_number
 
     if not phone_number.startswith('254'):
-        phone_number=f"254{phone_number[-9:]}"
+        phone_number=f"254{phone_number[-9:]}"""
     
     access_token=get_access_token()
     if not access_token:
@@ -32,18 +32,18 @@ def stk_push(request,user_id):
     
 
         payload={
-            "BusinessShortCode": settings.MPESA_SHORTCODE,
+            "BusinessShortCode": settings.MPESA_SHORTCODE,  # Your business paybill/till number
             "Password": password,
             "Timestamp": timestamp,
-            "TransactionType": "CustomerPayBillOnline",
-            "Amount": 1,  # Change this to the actual amount
-            "PartyA": "254706011873",  # Customer phone number
-            "PartyB": settings.MPESA_SHORTCODE,
-            "PhoneNumber": phone_number,  # Customer phone number
-            "CallBackURL": "https://c0bf-41-90-172-63.ngrok-free.app/mpesa_callback",
+            "TransactionType": "CustomerBuyGoodsOnline",  # Change based on use case
+            "Amount": 1,  # Modify as needed
+            "PartyA":'254727580118',  # The customer making payment
+            "PartyB":174379,  # The till number receiving payment
+            "PhoneNumber":'254727580118',  # Customer's phone number
+            "CallBackURL": "http://7c21-41-90-172-219.ngrok-free.app/mpesa_callback",
             "AccountReference": "Test Payment",
             "TransactionDesc": "Payment for services"
-
+        
         }
 
         headers = {

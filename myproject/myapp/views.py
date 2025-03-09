@@ -103,7 +103,7 @@ def edit_attendance(request, attendance_id):
         
         # Check if overtime hours changed
         if old_overtime != new_overtime:
-            additional_pay = (new_overtime - old_overtime) * 100
+            additional_pay = (new_overtime  * 100)
 
             # Update the user's payment record
             payment, created = Payment.objects.get_or_create(user=request.user)

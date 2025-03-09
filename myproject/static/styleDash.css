@@ -146,5 +146,34 @@ body{
 .table table th, td{
     padding:10px 15px;
 }
+.btn{
+    border:none;
+    border-radius: 8px;
+    padding:10px 15px;
+    background: black;
+    color:white;
+    margin:0 10px;
+}
+.btn-container{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding:30px 0;
+}
+.btn-container  a{
+    text-decoration: none;
+    list-style: none;
+}
+.btn-submit{
+    background: purple;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:100%;
+ 
+}
+
+
 
 

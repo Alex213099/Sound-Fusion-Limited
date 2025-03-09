@@ -68,12 +68,15 @@
                         <td>{{form.overtime_hours}}</td>
                     </tr>
                 </table>
-                <button type="submit">Submit</button>
+                <button type="submit" class="btn btn-submit">Submit</button>
             </form>
-            {%if attendance%}
-            <a href="{% url 'edit_attendance' attendance.id %}">Edit</a>
-            {%endif%}
-            <a href="{% url 'list' %}">Back to Attendance List</a>
+            <div class="btn-container">
+                {%if attendance%}
+                <a href="{% url 'edit_attendance' attendance.id %}" class="btn btn-edit">Edit</a>
+                {%endif%}
+                <a href="{% url 'list' %}" class="btn btn-back">Back to Attendance List</a>
+            </div>
+            
             
             
 
