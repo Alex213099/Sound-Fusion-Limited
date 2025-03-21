@@ -1,63 +1,78 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sound Fusion Limited</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
-    <header >
-        <div class="header">
-            <div class="logo">
-                <img src="images/sfl_logo" alt="Sound Fusion Logo">
-    
-            </div>
-            <nav class="nav-links">
-                <ul>
-                    <li><a href="https://www.soundfusion.co.ke/">Sound Fusion limited Website</a></li>
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                    <li><a href="{% url 'signup' %}">sign up</a></li>
-                    <li><a href="{% url 'signup' %}">About Us</a></li>
-                    <li><a href="{% url 'signup' %}">Services</a></li>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="https://www.soundfusion.co.ke/">
+                <img src="{% static 'images/sfl_logo.png' %}" alt="Sound Fusion Logo" width="150">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
                 </ul>
-            </nav>
-        </div>
-        
-    </header>
-    <main class="main">
-        <div class="hero">
-            <div class="hero-txt">
-                <h3>
-                    {%if user.is_authenticated%}
-                    {{user.name}}
-                    {%endif%}
-                </h3>
-                <h1>Welcome To Sound Fusion<br>Proceed to Login</h1>
-                <br><br>
-                <h2>Team talented with the best employees.We appreciate You</h2>
-                <div class="hero-links">
-                    <button><a href="">Contact us</a></button>
-                    <button><a href="">Watch Video</a></button>
-                    
-
-                </div>
-
             </div>
-            <form class="login_form" action="login" method="POST">
-                {%csrf_token%}
-                <p>Email:</p>
-                <input type="email" name="email" >
-                <p>Password:</p>
-                <input type="password" name="password"><br><br>
-                <input type="submit">
-    
-            </form>
         </div>
-        
-    </main>
-    <footer></footer>
-    
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="container text-center py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h3>
+                    {% if user.is_authenticated %}
+                    Welcome, {{ user.name }}
+                    {% endif %}
+                </h3>
+                <h1 class="fw-bold">Welcome To Sound Fusion</h1>
+                <p class="lead">Proceed to Login</p>
+                <p>Team talented with the best employees. We appreciate You!</p>
+                <div class="mt-4 mb-3">
+                    <a href="#" class="btn btn-primary">Contact Us</a>
+                    <a href="#" class="btn btn-outline-secondary">Watch Video</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card p-4 shadow-lg">
+                    <h4 class="text-center">Login</h4>
+                    <form action="login" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Email:</label>
+                            <input type="email" class="form-control" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password:</label>
+                            <input type="password" class="form-control" name="password" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success ">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p class="mb-0">&copy 2025 Sound Fusion Limited. All rights reserved.Developer Alex Gitonga</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

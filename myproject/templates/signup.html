@@ -1,40 +1,109 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Sign Up | Sound Fusion</title>
+    <!-- Bootstrap CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .signup-card {
+            max-width: 500px;
+            margin: auto;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center; /* Center everything inside */
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 15px; /* Centers logo and adds space below */
+            max-width: 120px; /* Adjust logo size */
+        }
+    </style>
 </head>
-<body>
-    <h1>Fill Up this Employees Form(SFL):</h1>
-    {%for message in messages%}
-    {{message}}
-    {%endfor%}
-    <form action="signup" method="POST">
-        {%csrf_token%}
-        <p>Name</p>
-        <input type="text" name="name">
-        <p>Phone Number</p>
-        <input type="text" name="phone_number">
-        <p>Email</p>
-        <input type="email" name="email">
-        <p>National ID Number</p>
-        <input type="text" name="id_number">
-        <h3>Gender</h3>
-        <input type="radio" name="gender" value="male">Male<br>
-        <input type="radio" name="gender" value="female">Female<br>
-        <p>Date Of Birth</p>
-        <input type="date" name="date_of_Birth">
-        <p>Disability</p>
-        <input type="checkbox" name="disability" value="physical">Physical<br>
-        <input type="checkbox" name="disability" value="Mental">Mental<br>
-        <input type="checkbox" name="disability"value="none">None
-        <p>Password:</p>
-        <input type="password" name="password">
-        <p>password2</p>
-        <input type="password" name="password2"><br><br>
-        <input type="submit">
-    </form>
-    
+<body class="d-flex align-items-center justify-content-center vh-100">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="signup-card">
+                    <!-- SFL Logo (Now properly spaced) -->
+                    <img src="{% static 'images/sfl_logo.jpg' %}" alt="SFL Logo" class="logo">
+                    
+                    <h2 class="mb-3">Employee Sign Up</h2>
+
+                    <!-- Display Messages -->
+                    {% for message in messages %}
+                        <div class="alert alert-info">{{ message }}</div>
+                    {% endfor %}
+
+                    <!-- Sign Up Form -->
+                    <form action="signup" method="POST">
+                        {% csrf_token %}
+
+                        <div class="mb-3 text-start">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3 text-start">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" name="phone_number" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3 text-start">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3 text-start">
+                            <label class="form-label">National ID Number</label>
+                            <input type="text" name="id_number" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3 text-start">
+                            <label class="form-label">Gender</label><br>
+                            <input type="radio" name="gender" value="male"> Male
+                            <input type="radio" name="gender" value="female"> Female
+                        </div>
+
+                        <div class="mb-3 text-start">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" name="date_of_Birth" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3 text-start">
+                            <label class="form-label">Disability</label><br>
+                            <input type="checkbox" name="disability" value="physical"> Physical
+                            <input type="checkbox" name="disability" value="mental"> Mental
+                            <input type="checkbox" name="disability" value="none"> None
+                        </div>
+
+                        <div class="mb-3 text-start">
+                            <label class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3 text-start">
+                            <label class="form-label">Confirm Password</label>
+                            <input type="password" name="password2" class="form-control" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

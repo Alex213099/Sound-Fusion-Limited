@@ -1,16 +1,22 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "myproject/manage.py",
-        "use": "@vercel/python"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "myproject/wsgi.py"
-      }
-    ]
-  }
-  
+  "version": 2,
+  "env": {
+    "DB_NAME": "railway",
+    "DB_USER": "root",
+    "DB_PASSWORD": "yourpassword",
+    "DB_HOST": "mysql.railway.internal",
+    "DB_PORT": "3306"
+  },
+  "builds": [
+    {
+      "src": "wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "wsgi.py"
+    }
+  ]
+}

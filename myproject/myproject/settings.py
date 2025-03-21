@@ -30,7 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['.vercel.app','*']
 CSRF_TRUSTED_ORIGINS = [
-    "http://9412-41-90-172-63.ngrok-free.app"
+    "https://1030-2c0f-fe38-2037-d3bf-e881-91f7-e353-8032.ngrok-free.app/"
 ]
 
 
@@ -140,6 +140,8 @@ LOGIN_URL='http://127.0.0.1:8000/login'
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS=(os.path.join(BASE_DIR,'static'),)
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

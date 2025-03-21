@@ -37,9 +37,9 @@ def stk_push(request):
             "Timestamp": timestamp,
             "TransactionType": "CustomerBuyGoodsOnline",  # Change based on use case
             "Amount": 1,  # Modify as needed
-            "PartyA":'254727580118',  # The customer making payment
+            "PartyA":'254705962256',  # The customer making payment
             "PartyB":174379,  # The till number receiving payment
-            "PhoneNumber":'254727580118',  # Customer's phone number
+            "PhoneNumber":'254705962256',  # Customer's phone number
             "CallBackURL": "http://7c21-41-90-172-219.ngrok-free.app/mpesa_callback",
             "AccountReference": "Test Payment",
             "TransactionDesc": "Payment for services"
@@ -119,12 +119,12 @@ def mpesa_callback(request):
                     salary-=amount
                     user.save()
                     Payment.objects.create(user=user,total_paid=amount,last_payment_date=transaction_date)
-                print(f"✅ Payment successful! Amount: {amount}, Receipt: {receipt_number}, Phone: {phone_number}")
+                print(f"Payment successful! Amount: {amount}, Receipt: {receipt_number}, Phone: {phone_number}")
                 return JsonResponse({'message': 'Payment processed successfully'})
                 
 
             else:
-                print(f"❌ Payment failed: {result_desc}")
+                print(f" Payment failed: {result_desc}")
                 return JsonResponse({'error': f"Payment failed: {result_desc}"}, status=400)
 
         except json.JSONDecodeError:
