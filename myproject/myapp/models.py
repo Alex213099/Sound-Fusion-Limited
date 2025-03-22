@@ -79,9 +79,9 @@ class Attendance(models.Model):
     hours_worked=models.PositiveIntegerField(default=8)
     overtime_hours=models.PositiveIntegerField(default=0)
 
-    def calculate_pay(self,overtime_hours):
+    def calculate_pay(self):
         base_pay=1000
-        return (overtime_hours*100)+base_pay
+        return (self.overtime_hours*100)+base_pay
     
     def save(self,*args,**kwargs):
         #check if attendance instace already exist (i.e its an update ,not an entry)
@@ -100,7 +100,7 @@ class Attendance(models.Model):
                 self.user.save()
         else:
             #if this is a new entry
-            pay=self.calculate_pay(self.overtime_hours)
+            pay=self.calculate_pay()
             payment,created=Payment.objects.get_or_create(user=self.user)
             payment.Total_billed+=pay
             self.user.salary=payment.Total_billed

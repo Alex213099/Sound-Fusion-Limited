@@ -70,10 +70,10 @@
                 <a href="{% url 'add_attendance' %}" class="nav-link"><i class="fa-solid fa-user-check"></i> Mark Attendance</a>
             </li>
             <li>
-                <a href="#" class="nav-link"><i class="fa-solid fa-edit"></i> Edit Attendance</a>
+                <a href="{% url 'edit_attendance' request.user.id %}" class="nav-link"><i class="fa-solid fa-edit"></i> Edit Attendance</a>
             </li>
             <li>
-                <a href="#" class="nav-link text-danger"><i class="fa-solid fa-sign-out-alt"></i> Log Out</a>
+                <a href="{ url 'logout'}" class="nav-link text-danger"><i class="fa-solid fa-sign-out-alt"></i> Log Out</a>
             </li>
         </ul>
     </div>

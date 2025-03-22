@@ -9,6 +9,8 @@ from datetime import date
 from .models import Attendance
 from django.contrib.auth.decorators import login_required
 from payment.models import Payment
+from payment.views import stk_push
+
 
 
 User=get_user_model()
@@ -71,27 +73,38 @@ def dashboard(request):
         user.refresh_from_db()
 
     return render(request,"dashboard.html",{'user':user,'payment':payment})
+
+
+
 @login_required
 def add_attendance(request):
-    attendance=None
-    if request.method == 'POST':
-        form = AttendanceForm(request.POST)
-        print(request.user)
-        if form.is_valid():
-            attendance = form.save(commit=False)  # Don't save yet
-            attendance.user = request.user # Assign the logged-in user
-            attendance.date = date.today()  # Set the date
-            attendance.save()
-            return redirect('list')
-        else:
-            print("Form errors:", form.errors)  # Debugging
-            
+    today = date.today()
 
+    # Check if the user has already marked attendance for today
+    attendance = Attendance.objects.filter(user=request.user, date=today).first()
+
+    if request.method == 'POST':
+        if attendance:
+            # Show a message if the user tries to mark attendance again
+            messages.warning(request, "You have already marked attendance for today!")
+            return redirect('add_attendance')  # Redirect to refresh the page
+        
+        form = AttendanceForm(request.POST)
+        if form.is_valid():
+            new_attendance = form.save(commit=False)
+            new_attendance.user = request.user
+            new_attendance.date = today  # Auto-set today's date
+            new_attendance.save()
+            messages.success(request, "Attendance marked successfully!")
+            return redirect('list')  # Redirect to attendance list
     else:
-        attendance = Attendance.objects.filter(user=request.user, date=date.today()).first()
         form = AttendanceForm(instance=attendance) if attendance else AttendanceForm()
 
-    return render(request, 'add_attendance.html', {'form': form,'attendance':attendance})
+    return render(request, 'add_attendance.html', {'form': form, 'attendance': attendance})
+
+
+
+
 @login_required
 def edit_attendance(request, attendance_id):
     attendance = get_object_or_404(Attendance, id=attendance_id, user=request.user)
@@ -121,7 +134,22 @@ def edit_attendance(request, attendance_id):
     return render(request, "edit_attendance.html", {"attendance": attendance})
 @login_required
 def list(request):
-    attendants=Attendance.objects.all()
+    attendants=Attendance.objects.filter(user=request.user)
 
 
     return render(request,'list.html',{'attendants':attendants})
+
+
+def admin_send_stk_push(request, attendance_id):
+    """Handles STK push from Django admin panel."""
+    attendance = get_object_or_404(Attendance, id=attendance_id)
+
+    # Call the STK push function
+    response = stk_push(attendance.user.phone_number, attendance.pay)
+
+    if response.get("ResponseCode") == "0":
+        messages.success(request, f"STK Push sent to {attendance.user.phone_number}")
+    else:
+        messages.error(request, "STK Push failed. Check logs.")
+
+    return redirect('/admin/myapp/attendance/')  # ✅ Redirect back to the admin panel

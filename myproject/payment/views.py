@@ -9,56 +9,59 @@ from .utils import get_access_token
 from django.views.decorators.csrf import csrf_exempt
 from .models import Payment
 from myapp.models import User
+from myapp.models import Attendance  # Import Attendance model
+
 
 
 # Create your views here.
 
+import traceback
+
 @csrf_exempt
-def stk_push(request):
-    """payment=Payment.objects.all().get()
-    phone_number=payment.user.phone_number
+def stk_push(request, attendance_id):
+    try:
+        attendance = Attendance.objects.get(id=attendance_id)
+        phone_number = attendance.user.phone_number  
 
-    if not phone_number.startswith('254'):
-        phone_number=f"254{phone_number[-9:]}"""
-    
-    access_token=get_access_token()
-    if not access_token:
-        return JsonResponse({'error':'Failed to get access token'})
-    else:
-        url=f"{settings.MPESA_BASE_URL}/mpesa/stkpush/v1/processrequest"
-        timestamp=datetime.now().strftime("%Y%m%d%H%M%S")
-        password=f"{settings.MPESA_SHORTCODE}{settings.MPESA_PASSKEY}{timestamp}".encode()
-        password=base64.b64encode(password).decode()
-    
+        if not phone_number.startswith('254'):
+            phone_number = f"254{phone_number[-9:]}"  # Ensure correct format
 
-        payload={
-            "BusinessShortCode": settings.MPESA_SHORTCODE,  # Your business paybill/till number
+        access_token = get_access_token()
+        if not access_token:
+            return JsonResponse({'error': 'Failed to get access token'})
+
+        url = f"{settings.MPESA_BASE_URL}/mpesa/stkpush/v1/processrequest"
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        password = f"{settings.MPESA_SHORTCODE}{settings.MPESA_PASSKEY}{timestamp}".encode()
+        password = base64.b64encode(password).decode()
+
+        payload = {
+            "BusinessShortCode": settings.MPESA_SHORTCODE,
             "Password": password,
             "Timestamp": timestamp,
-            "TransactionType": "CustomerBuyGoodsOnline",  # Change based on use case
-            "Amount": 1,  # Modify as needed
-            "PartyA":'254705962256',  # The customer making payment
-            "PartyB":174379,  # The till number receiving payment
-            "PhoneNumber":'254705962256',  # Customer's phone number
+            "TransactionType": "CustomerBuyGoodsOnline",
+            "Amount": attendance.calculate_pay(),  # Use calculated pay
+            "PartyA": phone_number,
+            "PartyB": 174379,  # Replace with your till number
+            "PhoneNumber": phone_number,
             "CallBackURL": "http://7c21-41-90-172-219.ngrok-free.app/mpesa_callback",
             "AccountReference": "Test Payment",
             "TransactionDesc": "Payment for services"
-        
         }
 
         headers = {
-        "Authorization": f"Bearer {access_token}",
-        "Content-Type": "application/json"
-    }
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json"
+        }
         response = requests.post(url, json=payload, headers=headers)
-    
         return JsonResponse(response.json())
-    
 
- 
-
-
-
+    except Attendance.DoesNotExist:
+        return JsonResponse({'error': 'Attendance record not found'})
+    except Exception as e:
+        error_message = traceback.format_exc()  # Capture full error
+        print(error_message)  # Print to terminal
+        return JsonResponse({'error': str(e)})
 
 import json
 import logging
